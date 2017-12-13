@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
         <!-- Styles -->
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <style>
             html, body {
                 background-color: #fff;
@@ -89,7 +90,20 @@
                     <a href="https://forge.laravel.com">Forge</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
+
+                <div id="app">
+                    <example-component></example-component>
+                </div>
+            </div>
+
+            <div class="ui labeled button" tabindex="0">
+                <div class="ui red button">
+                    <i class="heart icon"></i> Like
+                </div>
+                <a class="ui basic red left pointing label">9,999</a>
             </div>
         </div>
+
+        <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

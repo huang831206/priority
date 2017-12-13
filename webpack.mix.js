@@ -12,4 +12,10 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
+    .extract([
+        'underscore',
+        'jquery',
+        'axios',
+        'vue',
+        './resources/assets/semantic/dist/semantic'])
    .sass('resources/assets/sass/app.scss', 'public/css');
