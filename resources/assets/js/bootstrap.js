@@ -4,6 +4,12 @@ window._ = require('underscore');
 // include moment js
 window.moment = require('moment');
 
+//include sortable js
+window.Sortable = require('sortablejs');
+
+//include handlebars js
+window.Handlebars = require('handlebars');
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This

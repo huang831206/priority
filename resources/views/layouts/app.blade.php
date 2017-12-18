@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @yield('style')
 </head>
 <body>
     <div id="app">
@@ -71,10 +72,16 @@
             </div>
         </nav>
 
-        @yield('content')
+        <div class="ui container">
+            @yield('content')
+        </div>
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('/js/manifest.js') }}"></script>
+    <script src="{{ asset('/js/vendor.js') }}"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+
+    @yield('script')
 </body>
 </html>

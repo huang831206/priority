@@ -21,7 +21,9 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "handlebars": "^4.0.11",
         "moment": "^2.19.4",
+        "sortablejs": "^1.7.0",
         "underscore": "^1.8.3"
     }
 }

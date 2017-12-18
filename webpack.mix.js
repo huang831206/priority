@@ -14,13 +14,18 @@ let mix = require('laravel-mix');
 mix.webpackConfig({
 	resolve: {
 		alias: {
-			jquery: "jquery/src/jquery"
+			jquery: "jquery/src/jquery",
+			handlebars: 'handlebars/dist/handlebars.min.js'
 		}
 	}
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
+	.js('resources/assets/js/test.js', 'public/js')
+	// .js('resources/assets/js/Priority.js', 'public/js')
+	.scripts(['resources/assets/js/Priority.js'], 'public/js/Priority.js')
     .extract([
+		'handlebars',
         'underscore',
         'jquery',
         'axios',
