@@ -1,4 +1,4 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+<p align="center"><img src="https://github.com/huang831206/priority/blob/master/public/images/icon.png?raw=true"></p>
 
 <p align="center">
 <a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
@@ -6,6 +6,24 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
+
+## About M2
+
+M2 is a web application build for better teamwork and personal task management. We believe tasks must be managed with very little effort. M2 attempts to ease the pain of multi-taskers since traveling through different teams is surely a burden. We provide features similar to <a href="https://trello.com/">Trello</a> such as:
+
+- boards, lists, cards.
+- dragging to sort cards, lists.
+- gather mebers to board.
+
+which are nearly necessary for making a visualized task management application. But further, we enhance the ability of personal management by giving features such as:
+
+- personal priority board/list.
+- scrum points charts.
+- sorting between different cards from different boards.
+
+We hope this will bring some change to the world.
+And btw, it's fun to play with these codes.
+
 
 ## About Laravel
 
