@@ -19,8 +19,18 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/boards', function () {
+    return view('board');
+});
+
+Route::get('/board/{board_id}', function () {
+    return view('board');
+});
+
+Route::get('/priority', 'UserController@priority');
+
 Route::get('/test', function () {
-    return view('test');
+    return view('board');
 });
 
 Route::get('/tt', function () {
@@ -29,6 +39,13 @@ Route::get('/tt', function () {
 
 Route::prefix('a')->group(function () {
     Route::get('/user', function () {
-        
+
+    });
+
+    Route::get('/priority', 'UserController@getPriorityJSON');
+    Route::post('/priority/update', 'UserController@updatePriorityJSON');
+
+    Route::get('/tt', function () {
+        return 'tttttttttttttt';
     });
 });
