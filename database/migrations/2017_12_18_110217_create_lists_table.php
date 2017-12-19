@@ -15,7 +15,7 @@ class CreateListsTable extends Migration
     {
         Schema::create('lists', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('list_id', 16);
+            $table->string('list_hash', 16);
             $table->string('name');
             $table->string('in_board', 16);
             $table->integer('pos')->unsigned();

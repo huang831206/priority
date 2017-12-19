@@ -15,7 +15,7 @@ class CreateBoardsTable extends Migration
     {
         Schema::create('boards', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('board_id', 16);
+            $table->string('board_hash', 16);
             $table->string('name');
             $table->integer('user_id');
             $table->string('desc')->nullable();
