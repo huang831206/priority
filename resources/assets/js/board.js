@@ -1,5 +1,5 @@
 
-require('./bootstrap');
+// require('./bootstrap');
 // var Priority = require('./Priority');
 
 // make lists sortable
@@ -65,7 +65,9 @@ $(document).on('click', '.add-new-card', function () {
     priority.addNewCardToList($(this).parent().parent().find('.list-cards'));
 });
 
-priority.startGettingData();
+// priority.startGettingData();
+
+
 // priority.fetchData();
 // $('.add-new-card').click(function () {
 //     // $('.ui.modal').modal('show');

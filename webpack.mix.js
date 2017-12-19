@@ -21,7 +21,7 @@ mix.webpackConfig({
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
-	.js('resources/assets/js/test.js', 'public/js')
+	.js('resources/assets/js/board.js', 'public/js')
 	// .js('resources/assets/js/Priority.js', 'public/js')
 	.scripts(['resources/assets/js/Priority.js'], 'public/js/Priority.js')
     .extract([
@@ -31,4 +31,5 @@ mix.js('resources/assets/js/app.js', 'public/js')
         'axios',
         'vue',
         './resources/assets/semantic/dist/semantic'])
-   .sass('resources/assets/sass/app.scss', 'public/css');
+   .sass('resources/assets/sass/app.scss', 'public/css')
+   .sass('resources/assets/sass/board.scss', 'public/css');

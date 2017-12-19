@@ -1,47 +1,14 @@
 @extends('layouts.app')
 
 @section('style')
-<style type="text/css">
-	body {
-		max-height: 100%;
-	}
-
-	.ui.button.column {
-		margin: 5px;
-	}
-
-	.ui.button.column .input{
-		margin: 0px 15px;
-	}
-
-	.list-wrapper {
-		width: 270px;
-		min-width: 270px;
-		margin: 12px;
-
-	}
-
-	.list-cards {
-		min-width: 255px;
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-
-	.add-new-card {
-		cursor: pointer;
-	}
-
-	html, body, #app, .ui.container, .ui.card.segment.centered , .list-cards {
-		height: 100%;
-	}
-</style>
+	<link href="{{ asset('css/board.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 
-<button id="new-list" class="positive ui button">add list</button>
+@include('layouts.sub-nav')
 
-<div id="playground" class="ui horizontal segments" style="padding:6px 6px 36px 6px;overflow-x: auto;overflow-y: hidden;max-height: 100%;">
+<div id="playground" class="ui horizontal blue inverted segments">
 
 	<div class="six wide column list-wrapper">
 		<div class="ui card segment centered">
@@ -172,6 +139,6 @@
 @section('script')
 
 <script src="{{ asset('js/Priority.js') }}"></script>
-<script src="{{ asset('js/test.js') }}"></script>
+<script src="{{ asset('js/board.js') }}"></script>
 
 @endsection
