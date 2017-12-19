@@ -16,7 +16,7 @@ class TagsTableSeeder extends Seeder
 
         DB::table('tags')->insert([
             [
-                'tag_id' => 't01',
+                'tag_hash' => 't01',
                 'name' => 'tag 1',
                 'color' => 'red',
                 'in_board' => 'b01',
@@ -24,7 +24,7 @@ class TagsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'tag_id' => 't02',
+                'tag_hash' => 't02',
                 'name' => 'tag 2',
                 'color' => 'blue',
                 'in_board' => 'b01',

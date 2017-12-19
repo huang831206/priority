@@ -16,7 +16,7 @@ class CardsTableSeeder extends Seeder
 
         DB::table('cards')->insert([
             [
-                'card_id' => 'c01',
+                'card_hash' => 'c01',
                 'name' => 'card no.1',
                 'in_list' => 'l01',
                 'pos' => 1,
@@ -26,7 +26,7 @@ class CardsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'card_id' => 'c02',
+                'card_hash' => 'c02',
                 'name' => 'card no.2',
                 'in_list' => 'l01',
                 'pos' => 2,

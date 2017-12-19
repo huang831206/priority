@@ -16,7 +16,7 @@ class ListsTableSeeder extends Seeder
 
         DB::table('lists')->insert([
             [
-                'list_id' => 'l01',
+                'list_hash' => 'l01',
                 'name' => 'list no.1',
                 'in_board' => 'b01',
                 'pos' => 1,
@@ -24,7 +24,7 @@ class ListsTableSeeder extends Seeder
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
             [
-                'list_id' => 'l02',
+                'list_hash' => 'l02',
                 'name' => 'list no.2',
                 'in_board' => 'b01',
                 'pos' => 2,
