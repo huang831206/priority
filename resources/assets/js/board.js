@@ -10,6 +10,16 @@ if(typeof board == 'undefined'){
     console.log('board found!');
 }
 
+$('.sidebar')
+    .sidebar({
+        context: $('#app')
+    })
+    .sidebar('attach events', '#settings')
+    .sidebar('setting', 'transition', 'overlay')
+    .sidebar('setting', 'dimPage', false);
+
+$('.ui.dropdown').dropdown();
+
 // make lists sortable
 Sortable.create(playground, {
 
@@ -136,9 +146,9 @@ $(document).on('click', '.card-modal-edit .buttons .cancel', function () {
 // attempt to ad tag to card in modal
 $(document).on('click', '.card-tags-selection', function () {
     var tag = $(this);
-    var tagId = tag.data('id');
+    var tagHash = tag.data('id');
     // TODO: handle nultiple tags in card
-    console.log(tagId);
+    console.log(tagHash);
     // api call
     $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
 });
@@ -179,24 +189,12 @@ $(document).on('click', '.card-header-edit button', function () {
     $(this).parent().siblings('.header').text(header);
     $(this).parent().siblings('.header').show();
 
+    var cardHash = $(this).parent().parent().parent().data('id');
+    var listHash = $(this).parent().parent().parent().data('inlist');
+    priority.updateCard(listHash, cardHash, {name: header});
 });
 
 // priority.startGettingData();
-var source   = document.getElementById("card-modal-template").innerHTML;
-var html = Handlebars.compile(source)({'header':'hhhhh', 'content':'ccccccc'});
-$(html)
-.modal({
-    onHidden:function () {
-        console.log($(this).remove());
-    }
-})
-.modal('setting', 'transition', 'vertical flip')
-.modal('show');
-$('.tag-select-dropdown').dropdown({
-    fullTextSearch: true,
-    action: 'seleect'
-});
-
 
 // priority.fetchData();
 // $('.add-new-card').click(function () {

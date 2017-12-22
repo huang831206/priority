@@ -59,6 +59,35 @@ class Priority{
         console.log('finish adding list to board...');
     }
 
+    findList(list_hash){
+        var list = _.where(board.lists, {'list_hash': list_hash})[0];
+        // console.log(list);
+        return list;
+    }
+
+    findCard(list_hash, card_hash){
+        var card = _.where(this.findList(list_hash).cards, {'card_hash': card_hash})[0];
+        return card;
+    }
+
+    findTag(tag_hash){
+        return _.where(board.tags, {'tag_hash': tag_hash})[0];
+    }
+
+    findUser(user_id){
+        return _.where(board.users, {'id': user_id})[0];
+    }
+
+    updateCard(listHash, card_hash, data){
+        var card = this.findCard(listHash, card_hash);
+        card = _.extend(card, data);
+    }
+
+    addCardTags(card_hash, tag_hash){
+        var card = this.findCard(card_hash);
+        // card.
+    }
+
     /* ----- dirty ----- */
     // TODO: use WS
 

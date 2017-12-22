@@ -19,7 +19,7 @@
 				</div>
 				<div class="content list-cards" id="{{$list->list_hash}}" data-id="{{$list->list_hash}}">
 					@forelse ($list->cards as $card)
-					    <div class="ui centered raised card" id="{{$card->card_hash}}" data-id="{{$card->card_hash}}">
+					    <div class="ui centered raised card" id="{{$card->card_hash}}" data-id="{{$card->card_hash}}" data-inlist="{{$card->in_list}}">
 					        <div class="content">
 					            <div class="header">
 					                {{$card->name}}

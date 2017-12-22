@@ -69,7 +69,7 @@
                             </div>
                             {{-- serving the dropdown to all tags in board --}}
                             @forelse ($board->tags as $tag)
-                                <div class="item card-tags-selection" data-id="{{$tag->tag_hash}}">
+                                <div class="item card-tags-selection" data-id="{{$tag->tag_hash}}" data-inlist="@{{in_list}}">
                                     @if(isset($tag->name))
                                         <a class="ui item tag label {{$tag->color}}">{{$tag->name}}</a>
                                     @else

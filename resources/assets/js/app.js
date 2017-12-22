@@ -20,13 +20,3 @@ require('./bootstrap');
 // const app = new Vue({
 //     el: '#app'
 // });
-
-$('.sidebar')
-    .sidebar({
-        context: $('#app')
-    })
-    .sidebar('attach events', '#settings')
-    .sidebar('setting', 'transition', 'overlay')
-    .sidebar('setting', 'dimPage', false);
-
-$('.ui.dropdown').dropdown();
