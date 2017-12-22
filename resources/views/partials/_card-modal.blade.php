@@ -91,7 +91,9 @@
                                 </div>
                                 <!-- <a class="item"><div class="ui @{{color}} tag label">@{{name}}</div></a> -->
                             @{{else}}
-                                <a class="item"><div class="ui red tag label">&nbsp;</div></a>
+                                <div class="item" data-id="@{{tag_hash}}">
+                                    <a class="ui tag label @{{color}}">&nbsp;</a>
+                                </div>
                             @{{/if}}
                         @{{/each}}
                         <!-- <div class="item"><a class="ui red tag label">&nbsp;</a></div>

@@ -73,7 +73,7 @@ $(document).on('click', '.btn-edit-card', function () {
     // register modal for edit details
     $(html).modal({
         onHidden:function () {
-            console.log($(this).remove());
+            $(this).remove();
         }
     })
     .modal('setting', 'transition', 'vertical flip')
@@ -136,10 +136,20 @@ $(document).on('click', '.card-modal-edit .buttons .cancel', function () {
 // attempt to ad tag to card in modal
 $(document).on('click', '.card-tags-selection', function () {
     var tag = $(this);
+    var tagId = tag.data('id');
     // TODO: handle nultiple tags in card
-    console.log(tag);
+    console.log(tagId);
     // api call
     $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
+});
+
+// attempt to delete tag from card in modal
+$(document).on('click', '.card-tags-list .item', function () {
+    var tagId = $(this).data('id');
+    console.log(tagId);
+
+    // api call
+    $(this).remove();
 });
 
 // attempt to delete user from card in modal
