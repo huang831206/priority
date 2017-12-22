@@ -1,6 +1,6 @@
 <div class="ui secondary menu"  style="margin-bottom: 0; padding-left:24px">
     <div class="item">
-        <h2>board_name</h2>
+        <h2>{{ $board->name }}</h2>
     </div>
     <div class="item">
         <button id="new-list" class="yellow ui button">add list</button>

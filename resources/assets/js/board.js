@@ -2,6 +2,14 @@
 // require('./bootstrap');
 // var Priority = require('./Priority');
 
+if(typeof board == 'undefined'){
+    location.href = '/boards';
+    alert('an error occurred!')
+    console.log('board not found!!');
+} else {
+    console.log('board found!');
+}
+
 // make lists sortable
 Sortable.create(playground, {
 
@@ -11,61 +19,173 @@ Sortable.create(playground, {
     onUpdate: function (event) {
         var item = event.item;
         console.log($(item).find('input').val());
+        // api call, list pos change
     }
 
 });
-// example lists
-Sortable.create(alist, {
 
-    animation: 150,
-    draggable: '.card',
-    group: 'list',
+// initial list sorting
+_.each(board.lists, function (list) {
+    Sortable.create(document.getElementById(list.list_hash), {
 
-    onUpdate: function (event) {
-        var item = event.item;
-        console.log($(item).find('input').val());
-    }
+        animation: 150,
+        draggable: '.card',
+        group: 'list',
 
-});
-Sortable.create(b, {
+        onUpdate: function (event) {
+            var item = event.item;
+            console.log($(item).find('input').val());
+            // api call, card pos change
+        }
 
-    animation: 150,
-    draggable: '.card',
-    group: 'list',
-
-    onUpdate: function (event) {
-        var item = event.item;
-        console.log($(item).find('input').val());
-    }
-
-});
-Sortable.create(c, {
-
-    animation: 150,
-    draggable: '.card',
-    group: 'list',
-
-    onUpdate: function (event) {
-        var item = event.item;
-        console.log($(item).find('input').val());
-    }
-
-});
+    });
+})
 
 $('.ui.sticky').sticky();
 
+$('.ui.accordion').accordion();
 
 $('#new-list').click(function () {
     priority.addNewListToBoard($('#playground'));
     priority.displayData();
 });
 
-
+// attempt to add a ne card
 $(document).on('click', '.add-new-card', function () {
     priority.addNewCardToList($(this).parent().parent().find('.list-cards'));
 });
 
+// card edit is clicked
+$(document).on('click', '.btn-edit-card', function () {
+    console.log('btn clicked!');
+
+    // find data by card_hash
+    var card_hash = $(this).parent().parent().data('id');
+    console.log(card_hash);
+    var cardData = _.where(board.lists[0].cards, {'card_hash': card_hash});
+    // if not found, let it be empty
+    cardData = _.isEmpty(cardData) ? {} : _.first(cardData);
+    console.log(cardData);
+
+    var source   = document.getElementById("card-modal-template").innerHTML;
+    var html = Handlebars.compile(source)(cardData);
+
+    // register modal for edit details
+    $(html).modal({
+        onHidden:function () {
+            console.log($(this).remove());
+        }
+    })
+    .modal('setting', 'transition', 'vertical flip')
+    .modal('show');
+
+    // register dropdown and allow fuzzy search
+    $('.tag-select-dropdown').dropdown({
+        fullTextSearch: true,
+        action: 'nothing'
+    });
+
+});
+
+// card delete is clicked
+$(document).on('click', '.btn-delete-card', function () {
+    console.log('btn clicked!');
+    var source   = document.getElementById("delete-confirm-template").innerHTML;
+    var html = Handlebars.compile(source)();
+
+    var card = $(this).parent().parent();
+
+    $(html).modal({
+        onHidden:function () {
+            console.log($(this).remove());
+        },
+        onApprove : function() {
+            // TODO: find card hash
+            // api call
+            card.remove();
+        }
+    }).modal('show');
+
+});
+
+// attempt to edit catd details in modal
+$(document).on('click', '.btn-edit-card-content', function () {
+    $(this).parent().hide();
+    $(this).parent().siblings('.card-modal-edit').show();
+});
+
+// confirm edit card detail and submit to server
+$(document).on('click', '.btn-confirm-edit-modal-content', function () {
+    // get new content
+    var content = $(this).parent().siblings('textarea').val();
+    // api call
+    $(this).parent().parent().hide();
+    $(this).parent().parent().siblings('.card-modal-content').find('pre').text(content);
+    $(this).parent().parent().siblings('.card-modal-content').show();
+});
+
+// cancel edit card detail
+$(document).on('click', '.card-modal-edit .buttons .cancel', function () {
+
+    $(this).parent().parent().hide();
+    var oldContent = $(this).parent().parent().siblings('.card-modal-content').find('pre').text();
+    $(this).parent().siblings('textarea').val(oldContent);
+    $(this).parent().parent().siblings('.card-modal-content').show();
+});
+
+// attempt to ad tag to card in modal
+$(document).on('click', '.card-tags-selection', function () {
+    var tag = $(this);
+    // TODO: handle nultiple tags in card
+    console.log(tag);
+    // api call
+    $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
+});
+
+// attempt to delete user from card in modal
+$(document).on('click', '.btn-delete-user', function () {
+    var userId = $(this).parent().data('id');
+    console.log(userId);
+
+    // api call
+    $(this).parent().remove();
+});
+
+// clicked header of card in list, attempt to modify it
+$(document).on('click', '.card .content .header', function () {
+
+    $(this).hide();
+    $(this).siblings('.card-header-edit').show();
+
+});
+
+// attempt to save header of card in list
+$(document).on('click', '.card-header-edit button', function () {
+    var header = $(this).siblings('input').val();
+    console.log(header);
+
+    // api call
+    $(this).parent().hide();
+    $(this).parent().siblings('.header').text(header);
+    $(this).parent().siblings('.header').show();
+
+});
+
 // priority.startGettingData();
+var source   = document.getElementById("card-modal-template").innerHTML;
+var html = Handlebars.compile(source)({'header':'hhhhh', 'content':'ccccccc'});
+$(html)
+.modal({
+    onHidden:function () {
+        console.log($(this).remove());
+    }
+})
+.modal('setting', 'transition', 'vertical flip')
+.modal('show');
+$('.tag-select-dropdown').dropdown({
+    fullTextSearch: true,
+    action: 'seleect'
+});
 
 
 // priority.fetchData();

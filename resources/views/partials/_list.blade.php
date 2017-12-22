@@ -4,9 +4,9 @@
             <!-- <h4 class="ui top attached inverted header">Header</h4> -->
             <div class="content" style="background: #545454; color: white;">
                 <i class="right floated large add square icon add-new-card"></i>
-                <div class="header" style="color: white;">Cute Dog</div>
+                <div class="header" style="color: white;">New List</div>
             </div>
-            <div class="content list-cards" id="@{{list_id}}">
+            <div class="content list-cards" id="@{{list_hash}}">
                 <!-- TODO:multi card types -->
                 <!-- a card -->
             </div>

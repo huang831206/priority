@@ -10,119 +10,66 @@
 
 <div id="playground" class="ui horizontal blue inverted segments">
 
-	<div class="six wide column list-wrapper">
-		<div class="ui card segment centered">
-			{{-- <h4 class="ui top attached inverted header">Header</h4> --}}
-			<div class="content" style="background: #545454; color: white;">
-				<i class="right floated large add square icon add-new-card"></i>
-				<div class="header" style="color: white;">Cute Dog</div>
-			</div>
-			<div class="content list-cards" id="alist">
-				{{-- TODO:multi card types --}}
-				{{-- a card --}}
-			    <div class="ui centered raised card">
-			        <div class="content">
-			            <div class="header">
-			                Abbreviated Header
-			            </div>
-			            <div class="ui fluid action input description">
-			                <input type="text" placeholder="text here">
-			            </div>
-			        </div>
-			        <div class="extra content">
-			            <div class="right floated author">
-			                <i class="user icon"></i> Username
-			            </div>
-			        </div>
-			        <div class="ui two bottom attached buttons">
-			            <div class="ui button">
-			                Action 1
-			            </div>
-			            <div class="ui button">
-			                Action 2
-			            </div>
-			        </div>
-			    </div>
-			</div>
-		</div>
-	</div>
-
-	<div class="six wide column list-wrapper">
-		<div class="ui card segment centered">
-			{{-- <h4 class="ui top attached inverted header">Header</h4> --}}
-			<div class="content" style="background: #545454; color: white;">
-				<i class="right floated large add square icon add-new-card"></i>
-				<div class="header" style="color: white;">Cute Dog</div>
-			</div>
-			<div class="content list-cards" id="b">
-				{{-- TODO:multi card types --}}
-				{{-- a card --}}
-			    <div class="ui centered raised card">
-			        <div class="content">
-			            <div class="header">
-			                Abbreviated Header
-			            </div>
-			            <div class="ui fluid action input description">
-			                <input type="text" placeholder="text here">
-			            </div>
-			        </div>
-			        <div class="extra content">
-			            <div class="right floated author">
-			                <i class="user icon"></i> Username
-			            </div>
-			        </div>
-			        <div class="ui two bottom attached buttons">
-			            <div class="ui button">
-			                Action 1
-			            </div>
-			            <div class="ui button">
-			                Action 2
-			            </div>
-			        </div>
-			    </div>
+	@forelse ($board->lists as $list)
+		<div class="six wide column list-wrapper">
+			<div class="ui card segment centered">
+				<div class="content" style="background: #545454; color: white;">
+					<i class="right floated large add square icon add-new-card"></i>
+					<div class="header" style="color: white;">{{$list->name}}</div>
+				</div>
+				<div class="content list-cards" id="{{$list->list_hash}}" data-id="{{$list->list_hash}}">
+					@forelse ($list->cards as $card)
+					    <div class="ui centered raised card" id="{{$card->card_hash}}" data-id="{{$card->card_hash}}">
+					        <div class="content">
+					            <div class="header">
+					                {{$card->name}}
+					            </div>
+					            <div class="ui fluid action input description card-header-edit" style="display:none;">
+					                <input type="text" placeholder="Card header (required)" value="{{$card->name}}">
+									<button class="ui teal icon button">
+										<i class="checkmark icon"></i>
+									</button>
+					            </div>
+					        </div>
+					        <div class="extra content">
+								@forelse ($card->tags as $tag)
+									@if(isset($tag->name))
+										<a class="ui tag label {{$tag->color}}">{{$tag->name}}</a>
+									@else
+										<a class="ui tag label {{$tag->color}}">&nbsp;</a>
+									@endif
+								@empty
+								@endforelse
+					        </div>
+					        <div class="extra content">
+								@forelse ($card->users as $user)
+									<div class="right floated author">
+									   <i class="user icon"></i> {{$user->name}}
+								   </div>
+							   	@empty
+								@endforelse
+					        </div>
+					        <div class="ui two bottom attached buttons">
+					            <div class="ui button btn-edit-card">
+					                <i class="edit icon btn-edit-card"></i> Edit
+					            </div>
+					            <div class="ui button btn-delete-card">
+					                <i class="remove icon"></i> Delete
+					            </div>
+					        </div>
+					    </div>
+					@empty
+					@endforelse
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="six wide column list-wrapper">
-		<div class="ui card segment centered">
-			{{-- <h4 class="ui top attached inverted header">Header</h4> --}}
-			<div class="content" style="background: #545454; color: white;">
-				<i class="right floated large add square icon add-new-card"></i>
-				<div class="header" style="color: white;">Cute Dog</div>
-			</div>
-			<div class="content list-cards" id="c">
-				{{-- TODO:multi card types --}}
-				{{-- a card --}}
-			    <div class="ui centered raised card">
-			        <div class="content">
-			            <div class="header">
-			                Abbreviated Header
-			            </div>
-			            <div class="ui fluid action input description">
-			                <input type="text" placeholder="text here">
-			            </div>
-			        </div>
-			        <div class="extra content">
-			            <div class="right floated author">
-			                <i class="user icon"></i> Username
-			            </div>
-			        </div>
-			        <div class="ui two bottom attached buttons">
-			            <div class="ui button">
-			                Action 1
-			            </div>
-			            <div class="ui button">
-			                Action 2
-			            </div>
-			        </div>
-			    </div>
-			</div>
-		</div>
-	</div>
+	@empty
+	@endforelse
 
 </div>
-
+<script id="aaa" type="text/x-handlebars-template">
+	<h1>@{{name}}</h1>
+</script>
 
 <div class="ui tiny modal">
 	<div class="header">Header</div>
@@ -133,11 +80,16 @@
 
 @include('partials/_card')
 @include('partials/_list')
+@include('partials/_card-modal')
+@include('partials/_delete-confirm')
 
 @endsection
 
 @section('script')
 
+<script type="text/javascript">
+	var board = @json($board)
+</script>
 <script src="{{ asset('js/Priority.js') }}"></script>
 <script src="{{ asset('js/board.js') }}"></script>
 

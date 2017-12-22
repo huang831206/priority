@@ -5,6 +5,14 @@ class Priority{
         console.log('Priority.js loaded');
 
         this.data = ['abc'];
+
+        _.mixin({
+            whereNot: function (list, properties) {
+                return _.filter(list, function (obj) {
+                    return !_.isMatch(list, obj);
+                });
+            }
+        });
     }
 
 
@@ -13,8 +21,11 @@ class Priority{
 
         console.log(list);
 
+        var card_hash = this.uniqueId(10, 'c');
+        console.log('card_hash');
+
         var source   = document.getElementById("card-template").innerHTML;
-        var html = Handlebars.compile(source)({});
+        var html = Handlebars.compile(source)({'card_hash': card_hash});
         $(list).append(html);
 
         console.log('finish adding card to list...');
@@ -25,14 +36,14 @@ class Priority{
 
         console.log(board);
 
-        var list_id = this.uniqueId(10, 'l');
-        console.log('list_id');
+        var list_hash = this.uniqueId(10, 'l');
+        console.log('list_hash');
 
         var source   = document.getElementById("list-template").innerHTML;
-        var html = Handlebars.compile(source)({'list_id': list_id});
+        var html = Handlebars.compile(source)({'list_hash': list_hash});
         $(html).appendTo(board);
 
-        Sortable.create(document.getElementById(list_id), {
+        Sortable.create(document.getElementById(list_hash), {
 
             animation: 150,
             draggable: '.card',
@@ -104,7 +115,7 @@ class Priority{
             str += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         if(prefix){
-            str = prefix + str;
+            str = prefix + '-' + str;
         }
         return str;
     }

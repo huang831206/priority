@@ -15,6 +15,11 @@
                     @endif
 
                     You are logged in!
+                    <ul>
+                        @foreach ($data as $board)
+                            <li><a href="{{route('board', ['board' => $board->board_hash])}}">{{$board->name}}</a></li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
