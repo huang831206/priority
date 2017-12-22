@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/board/{board}', 'BoardsController@show')->name('board');
 
-    Route::get('/priority', 'UserController@priority');
+    Route::get('/priority', 'UserController@priority')->name('priority');
 
     Route::get('/test', function () {
         return view('board');
@@ -34,7 +34,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tt', function () {
         return 'tttttttttttttt';
     });
-    
+
 });
 
 Route::prefix('a')->group(function () {
