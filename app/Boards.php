@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Lists;
+use App\BoardResources;
 
 class Boards extends Model
 {
@@ -15,18 +16,41 @@ class Boards extends Model
      */
     protected $guarded = [];
 
-    // TODO: extract this
-    public function boardResources()
+    public function scopeBoardResources($query, $type)
     {
-        return $this->hasMany('App\BoardResources', 'resource_id', 'id');
+        $rawBoardResources = BoardResources::where('resource_type', $type)->where('board_id', $this->id)->get();
+        return $rawBoardResources;
     }
 
     public function scopeLists($query)
     {
-        $rawBoardResources = $this->boardResources()->where('resource_type', 'list');
-        $listIds = $rawBoardResources->pluck('id');
+        $rawBoardResources = $query->boardResources('list');
+        $listIds = $rawBoardResources->pluck('resource_id');
+        return Lists::find($listIds)->except(['created_at', 'updated_at']);
+    }
 
-        return Lists::find($listIds);
+    public function scopeUsers($query)
+    {
+        $rawBoardResources = $query->boardResources('user');
+        $userIds = $rawBoardResources->pluck('resource_id');
+        return User::find($userIds);
+    }
+
+    public function scopeTags($query)
+    {
+        $rawBoardResources = $query->boardResources('tag');
+        $tagIds = $rawBoardResources->pluck('resource_id');
+        return Tags::find($tagIds);
+    }
+
+    /**
+    * Get the route key for the model.
+    *
+    * @return string
+    */
+    public function getRouteKeyName()
+    {
+        return 'board_hash';
     }
 
 }

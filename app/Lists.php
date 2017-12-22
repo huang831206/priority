@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Lists extends Model
 {
@@ -13,4 +14,12 @@ class Lists extends Model
      * @var array
      */
     protected $guarded = [];
+
+    public function scopeCards()
+    {
+
+        $cardIds = DB::table('list_cards')->where('list_id', $this->id)->pluck('card_id');
+
+        return Cards::find($cardIds);
+    }
 }
