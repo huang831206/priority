@@ -27,5 +27,9 @@ class DatabaseSeeder extends Seeder
         $this->command->info('list_cards table seeded!');
         $this->call(CardTagsTableSeeder::class);
         $this->command->info('card_tags table seeded!');
+        $this->call(CardUsersTableSeeder::class);
+        $this->command->info('card_users table seeded!');
+        $this->call(CommentsTableSeeder::class);
+        $this->command->info('comments table seeded!');
     }
 }
