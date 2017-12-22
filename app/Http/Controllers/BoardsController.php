@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Boards;
+use App\BoardResources;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BoardsController extends Controller
 {
@@ -14,7 +17,14 @@ class BoardsController extends Controller
      */
     public function index()
     {
-        //
+        $user = Auth::user();
+
+        $boardIds = BoardResources::where('resource_type', 'user')
+                                    ->where('resource_id', $user->id)
+                                    ->get()->pluck('board_id');
+
+        $data = Boards::find($boardIds);
+        return view('home')->with(['data' => $data]);
     }
 
     /**
@@ -44,9 +54,26 @@ class BoardsController extends Controller
      * @param  \App\Boards  $boards
      * @return \Illuminate\Http\Response
      */
-    public function show(Boards $boards)
+    public function show(Boards $board)
     {
-        //
+        $data = $board;
+
+        $data['users'] = $board->users();
+
+        $data['tags'] = $board->tags();
+
+        $data['lists'] = $board->lists();
+
+        foreach ($data['lists'] as $list) {
+            $list['cards'] = $list->cards();
+
+            foreach ($list['cards'] as $card) {
+                $card['tags'] = $card->tags();
+                $card['users'] = $card->users();
+            }
+        }
+
+        return view('board')->with(['board' => $board]);
     }
 
     /**

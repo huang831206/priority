@@ -17,24 +17,24 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::middleware(['auth'])->group(function () {
 
-Route::get('/boards', function () {
-    return view('board');
-});
+    Route::get('/home', 'BoardsController@index')->name('home');
 
-Route::get('/board/{board_id}', function () {
-    return view('board');
-});
+    Route::get('/boards', 'BoardsController@index');
 
-Route::get('/priority', 'UserController@priority');
+    Route::get('/board/{board}', 'BoardsController@show')->name('board');
 
-Route::get('/test', function () {
-    return view('board');
-});
+    Route::get('/priority', 'UserController@priority');
 
-Route::get('/tt', function () {
-    return 'tttttttttttttt';
+    Route::get('/test', function () {
+        return view('board');
+    });
+
+    Route::get('/tt', function () {
+        return 'tttttttttttttt';
+    });
+    
 });
 
 Route::prefix('a')->group(function () {
@@ -45,7 +45,19 @@ Route::prefix('a')->group(function () {
     Route::get('/priority', 'UserController@getPriorityJSON');
     Route::post('/priority/update', 'UserController@updatePriorityJSON');
 
-    Route::get('/tt', function () {
-        return 'tttttttttttttt';
-    });
+    // Route::get('/list', '');
+    // Route::post('/list/update', '');
+    //
+    // Route::prefix('cards/{card_hash}')->group(function () {
+    //     Route::get('/', '');
+    //     Route::post('/update', '');
+    //     Route::post('/member/add', '');
+    //     Route::post('/member/delete', '');
+    // });
+    //
+    // Route::prefix('tags/{tag_hash}')->group(function () {
+    //     Route::get('/', '');
+    //     Route::post('/create', '');
+    //     Route::post('/update', '');
+    // });
 });
