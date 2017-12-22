@@ -16,7 +16,7 @@ class Cards extends Model
     protected $guarded = [];
 
     // return Illuminate\Support\Collection instead of Illuminate\Database\Eloquent\Collection
-    public function scopeTags()
+    public function scopeTags($query)
     {
 
         $tagIds = DB::table('card_tags')->where('card_id', $this->id)->pluck('tag_id');
@@ -26,7 +26,7 @@ class Cards extends Model
     }
 
     // return Illuminate\Support\Collection instead of Illuminate\Database\Eloquent\Collection
-    public function scopeUsers()
+    public function scopeUsers($query)
     {
 
         $userIds = DB::table('card_users')->where('card_id', $this->id)->pluck('user_id');

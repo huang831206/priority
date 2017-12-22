@@ -15,7 +15,7 @@ class Lists extends Model
      */
     protected $guarded = [];
 
-    public function scopeCards()
+    public function scopeCards($query)
     {
 
         $cardIds = DB::table('list_cards')->where('list_id', $this->id)->pluck('card_id');

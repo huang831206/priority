@@ -23,7 +23,13 @@ class BoardsController extends Controller
                                     ->where('resource_id', $user->id)
                                     ->get()->pluck('board_id');
 
-        $data = Boards::find($boardIds);
+
+        $data['boards'] = Boards::find($boardIds);
+        foreach ($data['boards'] as $board) {
+            $board->user_count = BoardResources::where('resource_type', 'user')->where('board_id', $board->id)->count();
+        }
+
+        $data['priority'] = $user->priority;
         return view('home')->with(['data' => $data]);
     }
 
