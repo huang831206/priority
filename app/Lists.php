@@ -20,6 +20,6 @@ class Lists extends Model
 
         $cardIds = DB::table('list_cards')->where('list_id', $this->id)->pluck('card_id');
 
-        return Cards::find($cardIds);
+        return Cards::find($cardIds)->sortBy('pos');
     }
 }

@@ -26,7 +26,7 @@ class Boards extends Model
     {
         $rawBoardResources = $query->boardResources('list');
         $listIds = $rawBoardResources->pluck('resource_id');
-        return Lists::find($listIds)->except(['created_at', 'updated_at']);
+        return Lists::find($listIds)->except(['created_at', 'updated_at'])->sortBy('pos');
     }
 
     public function scopeUsers($query)
