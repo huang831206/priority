@@ -8,6 +8,7 @@ class Priority{
 
         this.api_path = {
             'update_priority' : '/a/priority/update',
+            'update_lists' : '/a/list/update',
         };
 
         _.mixin({
@@ -27,10 +28,10 @@ class Priority{
 
         var card = {
             card_hash: cardHash,
-            content: null,
+            content: '',
             in_list: list.data('id'),
             name: 'New Card',
-            point: null,
+            point: 0,
             pos: list.children().length,
             tags: [],
             users: []
@@ -214,6 +215,7 @@ class Priority{
     }
 
     updateCardsPos(event){
+        console.log('update card pos');
         var fromListHash = $(event.from).data('id');
         var toListHash = $(event.to).data('id');
         var cardHash = $(event.item).data('id');
@@ -241,6 +243,16 @@ class Priority{
 
         this.sortCards(fromList.cards);
         this.sortCards(toList.cards);
+
+        this.saveData( this.api_path.update_lists,
+            _.pick(board, 'board_hash', 'lists'),
+            function (response) {
+                console.log(response);
+            },
+            function (error) {
+                console.log(error);
+            }
+        );
     }
 
     updatePriority(event){
