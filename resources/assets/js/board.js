@@ -42,10 +42,14 @@ _.each(board.lists, function (list) {
         draggable: '.card',
         group: 'list',
 
-        onUpdate: function (event) {
+        onEnd: function (event) {
             var item = event.item;
             console.log($(item).find('input').val());
+            console.log('drag event: ');
+            console.log(event);
             // api call, card pos change
+            priority.updateCardsPos(event);
+
         }
 
     });
@@ -70,11 +74,13 @@ $(document).on('click', '.btn-edit-card', function () {
     console.log('btn clicked!');
 
     // find data by card_hash
-    var card_hash = $(this).parent().parent().data('id');
-    console.log(card_hash);
-    var cardData = _.where(board.lists[0].cards, {'card_hash': card_hash});
+    var cardHash = $(this).parent().parent().data('id');
+    var listHash = $(this).parent().parent().data('inlist');
+    console.log(cardHash);
+    // var cardData = _.where(board.lists[0].cards, {'card_hash': cardHash});
+    var cardData = priority.findCard(listHash, cardHash);
     // if not found, let it be empty
-    cardData = _.isEmpty(cardData) ? {} : _.first(cardData);
+    // cardData = _.isEmpty(cardData) ? {} : _.first(cardData);
     console.log(cardData);
 
     var source   = document.getElementById("card-modal-template").innerHTML;
@@ -89,8 +95,14 @@ $(document).on('click', '.btn-edit-card', function () {
     .modal('setting', 'transition', 'vertical flip')
     .modal('show');
 
-    // register dropdown and allow fuzzy search
+    // register tag dropdown and allow fuzzy search
     $('.tag-select-dropdown').dropdown({
+        fullTextSearch: true,
+        action: 'nothing'
+    });
+
+    // register user dropdown and allow fuzzy search
+    $('.user-select-dropdown').dropdown({
         fullTextSearch: true,
         action: 'nothing'
     });
@@ -112,6 +124,9 @@ $(document).on('click', '.btn-delete-card', function () {
         onApprove : function() {
             // TODO: find card hash
             // api call
+            var cardHash = card.data('id');
+            var listHash = card.data('inlist')
+            priority.deleteCardFromList(listHash, cardHash);
             card.remove();
         }
     }).modal('show');
@@ -143,36 +158,108 @@ $(document).on('click', '.card-modal-edit .buttons .cancel', function () {
     $(this).parent().parent().siblings('.card-modal-content').show();
 });
 
-// attempt to ad tag to card in modal
+// attempt to add tag to card in modal
 $(document).on('click', '.card-tags-selection', function () {
     var tag = $(this);
+    console.log(tag);
     var tagHash = tag.data('id');
-    // TODO: handle nultiple tags in card
-    console.log(tagHash);
+    var cardHash = tag.data('card-hash');
+    var listHash = tag.data('in-list');
+
+    console.log('attempt to add tag, details: ');
+    console.log(tagHash + ' ' + cardHash + ' ' + listHash);
     // api call
-    $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
+    var card = priority.addCardTags(listHash, cardHash, tagHash);
+    if( card ){
+        $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
+        priority.updateCardUI(cardHash, card);
+    }
 });
 
 // attempt to delete tag from card in modal
 $(document).on('click', '.card-tags-list .item', function () {
-    var tagId = $(this).data('id');
-    console.log(tagId);
+    var tagHash = $(this).data('id');
+    var cardHash = $(this).parent().data('card-hash');
+    var listHash = $(this).parent().data('in-list');
+    console.log('attempt to delete tag, details: ');
+    console.log(tagHash + ' ' + cardHash + ' ' + listHash);
 
     // api call
-    $(this).remove();
+    var card = priority.removeCardTags(listHash, cardHash, tagHash);
+    if( card ){
+        console.log('new card: ');
+        console.log(card);
+        priority.updateCardUI(cardHash, card);
+        $(this).remove();
+    }
+});
+
+// attempt to add user to card in modal
+$(document).on('click', '.card-users-selection', function () {
+    var userName = $(this).find('a').text();
+
+    var userId = $(this).data('id');
+    var cardHash = $(this).data('card-hash');
+    var listHash = $(this).data('in-list');
+
+    console.log('attempt to add user, details: ');
+    console.log(userId + ' ' + userName + ' ' + cardHash + ' ' + listHash);
+    // api call
+    var card = priority.addCardUsers(listHash, cardHash, userId);
+    if( card ){
+        var cardTemplate = [
+            '<div class="ui large icon blue label" data-id="',
+            userId,
+            '"><i class="user icon"></i>',
+            userName,
+            '<i class="delete icon btn-delete-user"></i></div>'
+        ];
+        console.log('new user here: ');
+        console.log($(cardTemplate.join('')));
+        $(this).parent().parent().parent().siblings('.thirteen.wide.field.column').find('.card-modal-users-list').append($(cardTemplate.join('')));
+        priority.updateCardUI(cardHash, card);
+    }
 });
 
 // attempt to delete user from card in modal
 $(document).on('click', '.btn-delete-user', function () {
     var userId = $(this).parent().data('id');
-    console.log(userId);
+    var cardHash = $(this).parent().parent().data('card-hash');
+    var listHash = $(this).parent().parent().data('list-hash');
+    console.log(userId + ' ' + cardHash + ' ' + listHash);
 
     // api call
-    $(this).parent().remove();
+    var card = priority.removeCardUsers(listHash, cardHash, userId);
+    if( card ){
+        priority.updateCardUI(cardHash, card);
+        $(this).parent().remove();
+    }
+});
+
+// clicked header of list in board, attempt to modify it
+$(document).on('click', '.list-wrapper .card .header-section .header', function () {
+    $(this).hide();
+    $(this).siblings().hide();
+    $(this).siblings('.list-header-edit').show();
+});
+
+// attempt to save header of list in board
+$(document).on('click', '.list-header-edit button', function () {
+    var header = $(this).siblings('input').val();
+    console.log(header);
+
+    // api call
+    $(this).parent().hide();
+    $(this).parent().siblings('.header').text(header);
+    $(this).parent().siblings().show();
+
+    var listHash = $(this).parent().parent().parent().parent().data('id');
+    console.log(listHash);
+    priority.updateListHeader(listHash, header);
 });
 
 // clicked header of card in list, attempt to modify it
-$(document).on('click', '.card .content .header', function () {
+$(document).on('click', '.list-cards .card .content .header', function () {
 
     $(this).hide();
     $(this).siblings('.card-header-edit').show();
@@ -191,7 +278,8 @@ $(document).on('click', '.card-header-edit button', function () {
 
     var cardHash = $(this).parent().parent().parent().data('id');
     var listHash = $(this).parent().parent().parent().data('inlist');
-    priority.updateCard(listHash, cardHash, {name: header});
+    var card = priority.updateCard(listHash, cardHash, {name: header});
+    priority.updateCardUI(cardHash, card);
 });
 
 // priority.startGettingData();

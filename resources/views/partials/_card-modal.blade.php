@@ -7,7 +7,7 @@
             <div class="ui form grid">
                 <div class="thirteen wide field column">
 
-                    <div class="field card-modal-users-list">
+                    <div class="field card-modal-users-list" data-card-hash="@{{card_hash}}" data-list-hash="@{{in_list}}">
                         {{-- rendering users in js --}}
                         @{{#each users}}
                             <div class="ui large icon blue label" data-id="@{{id}}">
@@ -56,12 +56,33 @@
                 </div>
                 <div class="three wide column">
 
+                    <div class="ui icon right pointing dropdown button right floated user-select-dropdown" style="margin-bottom:1em;">
+                        <i class="users icon"></i>
+                        <div class="menu">
+                            <div class="ui search icon input">
+                                <i class="search icon"></i>
+                                <input type="text" name="search" placeholder="Search users...">
+                            </div>
+                            <div class="header">
+                                <i class="users icon"></i>
+                                Users
+                            </div>
+                            {{-- serving the dropdown to all users in board --}}
+                            @forelse ($board->users as $user)
+                                <div class="item card-users-selection" data-id="{{$user->id}}" data-in-list="@{{in_list}}" data-card-hash=@{{card_hash}}>
+                                    <a class="ui item label">{{$user->name}}</a>
+                                </div>
+                            @empty
+                            @endforelse
+                        </div>
+                    </div>
+
                     <div class="ui icon right pointing dropdown button right floated tag-select-dropdown" style="margin-bottom:1em;">
                         <i class="tags icon"></i>
                         <div class="menu">
                             <div class="ui search icon input">
                                 <i class="search icon"></i>
-                                <input type="text" name="search" placeholder="Search issues...">
+                                <input type="text" name="search" placeholder="Search tags...">
                             </div>
                             <div class="header">
                                 <i class="tags icon"></i>
@@ -69,7 +90,7 @@
                             </div>
                             {{-- serving the dropdown to all tags in board --}}
                             @forelse ($board->tags as $tag)
-                                <div class="item card-tags-selection" data-id="{{$tag->tag_hash}}" data-inlist="@{{in_list}}">
+                                <div class="item card-tags-selection" data-id="{{$tag->tag_hash}}" data-in-list="@{{in_list}}" data-card-hash=@{{card_hash}}>
                                     @if(isset($tag->name))
                                         <a class="ui item tag label {{$tag->color}}">{{$tag->name}}</a>
                                     @else
@@ -81,8 +102,7 @@
                         </div>
                     </div>
 
-
-                    <div class="ui right floated list field card-tags-list">
+                    <div class="ui right floated list field card-tags-list" data-in-list="@{{in_list}}" data-card-hash="@{{card_hash}}">
                         {{-- rendering tags tagged on card --}}
                         @{{#each tags}}
                             @{{#if name}}

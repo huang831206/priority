@@ -8,13 +8,20 @@
 
 @include('layouts.sub-nav')
 
-<div id="playground" class="ui horizontal blue inverted segments">
+<div id="playground" class="ui horizontal blue inverted segments" data-id="{{$board->board_hash}}">
 
 	@forelse ($board->lists as $list)
-		<div class="six wide column list-wrapper">
+		<div class="six wide column list-wrapper" data-id="{{$list->list_hash}}">
 			<div class="ui card segment centered">
-				<div class="content" style="background: #545454; color: white;">
+				<div class="content header-section" style="background: #545454; color: white;">
+					<div class="ui fluid action input description list-header-edit" style="display:none;">
+						<input type="text" placeholder="List header (required)" value="{{$list->name}}">
+						<button class="ui teal icon button">
+							<i class="checkmark icon"></i>
+						</button>
+					</div>
 					<i class="right floated large add square icon add-new-card"></i>
+					<i class="right floated large edit icon edit-list-header"></i>
 					<div class="header" style="color: white;">{{$list->name}}</div>
 				</div>
 				<div class="content list-cards" id="{{$list->list_hash}}" data-id="{{$list->list_hash}}">
