@@ -21,9 +21,14 @@ class UserController extends Controller
 
 
     public function priority() {
-        $user_id = Auth::id();
+        $user = Auth::user();
 
+        $data = new \stdClass();
+        $data->priority = json_decode($user->priority);
+        $data->inbox = $user->cards()->all();
+        $data->name = 'Inbox';
 
+        return view('priority')->with(['board' => $data]);
     }
 
     public function getPriorityJSON() {
@@ -48,7 +53,7 @@ class UserController extends Controller
             $data['errors']['message']= $validator->errors();
             return Response()->json($data);
         } else {
-            $user->priority = $request['priority'];
+            $user->priority = $request->getContent();
             $user->save();
             $data['success'] = true;
         }
