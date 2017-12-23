@@ -65,6 +65,13 @@ class BoardResourcesTableSeeder extends Seeder
                 'resource_id' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ],
+            [
+                'board_id' => 2,
+                'resource_type' => 'user',
+                'resource_id' => 1,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]
         ]);
     }
