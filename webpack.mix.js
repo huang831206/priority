@@ -22,6 +22,7 @@ mix.webpackConfig({
 
 mix.js('resources/assets/js/app.js', 'public/js')
 	.js('resources/assets/js/board.js', 'public/js')
+	.js('resources/assets/js/personal.js', 'public/js')
 	// .js('resources/assets/js/Priority.js', 'public/js')
 	.scripts(['resources/assets/js/Priority.js'], 'public/js/Priority.js')
     .extract([
