@@ -46,7 +46,7 @@ Route::prefix('a')->group(function () {
     Route::post('/priority/update', 'UserController@updatePriorityJSON');
 
     // Route::get('/list', '');
-    // Route::post('/list/update', '');
+    Route::post('/list/update', 'ListsController@update');
     //
     // Route::prefix('cards/{card_hash}')->group(function () {
     //     Route::get('/', '');
