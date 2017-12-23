@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'priority'
     ];
 
     /**
@@ -40,6 +40,8 @@ class User extends Authenticatable
             $board = Boards::where('board_hash', $board_hash)->first();
 
             $card['from_board'] = $board;
+
+            $card['tags'] = $card->tags();
         }
 
         return $cards;

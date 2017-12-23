@@ -77,10 +77,12 @@ $(document).on('click', '.btn-edit-card', function () {
     var cardHash = $(this).parent().parent().data('id');
     var listHash = $(this).parent().parent().data('inlist');
     console.log(cardHash);
+    console.log(listHash);
     // var cardData = _.where(board.lists[0].cards, {'card_hash': cardHash});
     var cardData = priority.findCard(listHash, cardHash);
     // if not found, let it be empty
     // cardData = _.isEmpty(cardData) ? {} : _.first(cardData);
+    console.log('cardData: ');
     console.log(cardData);
 
     var source   = document.getElementById("card-modal-template").innerHTML;

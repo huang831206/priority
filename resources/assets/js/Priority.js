@@ -6,6 +6,10 @@ class Priority{
 
         this.data = ['abc'];
 
+        this.api_path = {
+            'update_priority' : '/a/priority/update',
+        };
+
         _.mixin({
             whereNot: function (list, properties) {
                 return _.filter(list, function (obj) {
@@ -100,12 +104,15 @@ class Priority{
 
     findList(list_hash){
         var list = _.where(board.lists, {'list_hash': list_hash})[0];
-        // console.log(list);
+        console.log(list_hash + 'list found: ');
+        console.log(list);
         return list;
     }
 
     findCard(list_hash, card_hash){
         var card = _.where(this.findList(list_hash).cards, {'card_hash': card_hash})[0];
+        console.log(card_hash + 'card found: ');
+        console.log(card);
         return card;
     }
 
@@ -220,11 +227,46 @@ class Priority{
         });
         // add to toList
         toList.cards.push(card);
+        card.in_list = toListHash;
+        // change all card's pos by its current pos
         _.each(fromList.cards, function (card) {
             card.pos = $(event.from).find('#' + card.card_hash).index();
         });
         _.each(toList.cards, function (card) {
             card.pos = $(event.to).find('#' + card.card_hash).index();
+        });
+
+        // change in_list data in cards
+        $(event.item).data('inlist', toListHash);
+
+        this.sortCards(fromList.cards);
+        this.sortCards(toList.cards);
+    }
+
+    updatePriority(event){
+        var cardHash = $(event.item).data('id');
+
+        var list = board.priority;   // the priority list obj
+        var card = _.where(board.inbox, {'card_hash': cardHash})[0];     // the moved card obj
+
+        // if card was not in priority
+        if( ! _.findWhere(list, {'card_hash': cardHash}) ) {
+            // add to priority ist
+            console.log('was not in priority, pushing it...');
+            list.push(card);
+        }
+
+        _.each(list, function (card) {
+            // set priority position
+            card.priority_pos = $(event.to).find('#' + card.card_hash).index();
+        });
+
+        this.sortCards(list)
+    }
+
+    sortCards(list){
+        list = _.sortBy(list, function (card) {
+            return card.priority_pos;
         });
     }
 
@@ -254,15 +296,13 @@ class Priority{
         }
     }
 
-    saveData(data){
-        axios.post('/url', {
-            'param' : 'value'
-        })
+    saveData(url, data, onSuccess, onFail){
+        axios.post(url, data)
         .then(function (response) {
-
+            onSuccess(response);
         })
         .catch(function (error) {
-
+            onFail(error);
         });
     }
 
