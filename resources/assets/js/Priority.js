@@ -9,7 +9,8 @@ class Priority{
         this.api_path = {
             'update_priority' : '/a/priority/update',
             'update_lists' : '/a/list/update',
-            'new_list' : '/a/list/create'
+            'new_list' : '/a/list/create',
+            'new_board' : '/a/board/create'
         };
 
         _.mixin({
@@ -364,7 +365,7 @@ class Priority{
 
 
     uniqueId(length, prefix){
-        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         if (! length) {
             length = 12;
         }

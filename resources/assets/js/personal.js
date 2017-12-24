@@ -58,9 +58,10 @@ Sortable.create(document.getElementById('priority'), {
             function (response) {
                 console.log(response);
             },
-            function (errre) {
-
-        });
+            function (error) {
+                console.log(error);
+            }
+        );
     }
 
 });

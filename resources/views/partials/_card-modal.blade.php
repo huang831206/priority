@@ -43,9 +43,9 @@
                         <div class="field hidden">
                             <textarea style="max-height: 5em;min-height: 5em;"></textarea>
                         </div>
-                        <div class="ui blue labeled submit icon button">
+                        <!-- <div class="ui blue labeled submit icon button">
                             <i class="icon edit"></i> Submit
-                        </div>
+                        </div> -->
                         <div class="ui teal labeled icon button">
                             <i class="icon edit"></i> Add Comment
                         </div>

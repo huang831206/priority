@@ -10,7 +10,25 @@
                 </div>
             @endif
 
-            <h2>Teams</h2>
+            <div class="ui three column grid">
+                <div class="column">
+                    <h2>Teams</h2>
+                </div>
+                <div class="column new-board">
+                    <div class="item" style="margin-bottom:1em;">
+                        <button id="new-board-btn" class="brown ui button">New Board</button>
+                    </div>
+                </div>
+                <div class="column"></div>
+                <div id="board-name-box" class="ten wide column" style="display:none;">
+                    <div class="ui fluid action input description" style="margin-bottom:1em;">
+                        <input type="text" placeholder="Board name (required)" value="">
+                        <button class="ui teal icon button">
+                            <i class="checkmark icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
     {{-- {{dd($data)}} --}}
             @foreach ($data['boards'] as $board)
             <div class="ui special cards">
@@ -79,9 +97,36 @@
 @endsection
 
 @section('script')
+    <script src="{{ asset('js/Priority.js') }}"></script>
     <script type="text/javascript">
         $('.special.cards .image').dimmer({
             on: 'hover'
         });
+
+
+        $(document).on('click', '#new-board-btn', function () {
+            $(this).parent().parent().hide();
+            $('#board-name-box').show();
+        });
+
+        $(document).on('click', '#board-name-box button', function () {
+            var name = $(this).siblings('input').val();
+            if(name){
+                $('#board-name-box').hide();
+                $('#board-name-box').siblings('.new-board').show();
+                priority.saveData(priority.api_path.new_board,
+                    {
+                        'name' : name,
+                        'board_hash' : priority.uniqueId(10, 'b')
+                    },
+                    function (response) {
+                        location.href = '/board/' + response.data.board_hash;
+                    },
+                    function (error) {
+                        console.log(error);
+                    });
+            }
+        })
+
     </script>
 @endsection
