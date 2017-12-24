@@ -89,6 +89,7 @@
 @include('partials/_list')
 @include('partials/_card-modal')
 @include('partials/_delete-confirm')
+@include('partials/_alert')
 
 @endsection
 

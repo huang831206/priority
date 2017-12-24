@@ -286,6 +286,11 @@ $(document).on('click', '.card-header-edit button', function () {
     priority.updateCardUI(cardHash, card);
 });
 
+$(document).on('click', '.ui.reply.form .submit-comment', function () {
+
+    $('.ui.modal.monkey').modal('show');
+});
+
 // priority.startGettingData();
 
 // priority.fetchData();

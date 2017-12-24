@@ -46,7 +46,7 @@
                         <!-- <div class="ui blue labeled submit icon button">
                             <i class="icon edit"></i> Submit
                         </div> -->
-                        <div class="ui teal labeled icon button">
+                        <div class="ui teal labeled icon button submit-comment">
                             <i class="icon edit"></i> Add Comment
                         </div>
 
