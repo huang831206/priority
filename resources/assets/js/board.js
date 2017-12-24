@@ -28,8 +28,9 @@ Sortable.create(playground, {
 
     onUpdate: function (event) {
         var item = event.item;
-        console.log($(item).find('input').val());
-        // api call, list pos change
+        console.log(event);
+
+        priority.updateListPos(event);
     }
 
 });
@@ -47,7 +48,7 @@ _.each(board.lists, function (list) {
             console.log($(item).find('input').val());
             console.log('drag event: ');
             console.log(event);
-            // api call, card pos change
+
             priority.updateCardsPos(event);
 
         }
@@ -124,8 +125,6 @@ $(document).on('click', '.btn-delete-card', function () {
             console.log($(this).remove());
         },
         onApprove : function() {
-            // TODO: find card hash
-            // api call
             var cardHash = card.data('id');
             var listHash = card.data('inlist')
             priority.deleteCardFromList(listHash, cardHash);
@@ -149,6 +148,11 @@ $(document).on('click', '.btn-confirm-edit-modal-content', function () {
     $(this).parent().parent().hide();
     $(this).parent().parent().siblings('.card-modal-content').find('pre').text(content);
     $(this).parent().parent().siblings('.card-modal-content').show();
+
+    var listHash = $(this).parent().parent().siblings('.card-modal-users-list').data('list-hash');
+    var cardHash = $(this).parent().parent().siblings('.card-modal-users-list').data('card-hash');
+    console.log('changing card contend: ' + listHash + ' ' + cardHash);
+    priority.updateCard(listHash, cardHash, {'content': content});
 });
 
 // cancel edit card detail
@@ -170,7 +174,7 @@ $(document).on('click', '.card-tags-selection', function () {
 
     console.log('attempt to add tag, details: ');
     console.log(tagHash + ' ' + cardHash + ' ' + listHash);
-    // api call
+
     var card = priority.addCardTags(listHash, cardHash, tagHash);
     if( card ){
         $(this).parent().parent().siblings('.card-tags-list').append(tag.clone());
@@ -186,7 +190,7 @@ $(document).on('click', '.card-tags-list .item', function () {
     console.log('attempt to delete tag, details: ');
     console.log(tagHash + ' ' + cardHash + ' ' + listHash);
 
-    // api call
+
     var card = priority.removeCardTags(listHash, cardHash, tagHash);
     if( card ){
         console.log('new card: ');
@@ -206,7 +210,7 @@ $(document).on('click', '.card-users-selection', function () {
 
     console.log('attempt to add user, details: ');
     console.log(userId + ' ' + userName + ' ' + cardHash + ' ' + listHash);
-    // api call
+
     var card = priority.addCardUsers(listHash, cardHash, userId);
     if( card ){
         var cardTemplate = [
@@ -230,7 +234,6 @@ $(document).on('click', '.btn-delete-user', function () {
     var listHash = $(this).parent().parent().data('list-hash');
     console.log(userId + ' ' + cardHash + ' ' + listHash);
 
-    // api call
     var card = priority.removeCardUsers(listHash, cardHash, userId);
     if( card ){
         priority.updateCardUI(cardHash, card);
@@ -239,7 +242,8 @@ $(document).on('click', '.btn-delete-user', function () {
 });
 
 // clicked header of list in board, attempt to modify it
-$(document).on('click', '.list-wrapper .card .header-section .header', function () {
+$(document).on('click', '.list-wrapper .card .header-section .header, .edit-list-header', function () {
+    console.log('try to edit');
     $(this).hide();
     $(this).siblings().hide();
     $(this).siblings('.list-header-edit').show();
@@ -250,7 +254,6 @@ $(document).on('click', '.list-header-edit button', function () {
     var header = $(this).siblings('input').val();
     console.log(header);
 
-    // api call
     $(this).parent().hide();
     $(this).parent().siblings('.header').text(header);
     $(this).parent().siblings().show();
@@ -273,7 +276,6 @@ $(document).on('click', '.card-header-edit button', function () {
     var header = $(this).siblings('input').val();
     console.log(header);
 
-    // api call
     $(this).parent().hide();
     $(this).parent().siblings('.header').text(header);
     $(this).parent().siblings('.header').show();

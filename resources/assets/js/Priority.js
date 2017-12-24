@@ -9,6 +9,7 @@ class Priority{
         this.api_path = {
             'update_priority' : '/a/priority/update',
             'update_lists' : '/a/list/update',
+            'new_list' : '/a/list/create'
         };
 
         _.mixin({
@@ -43,6 +44,8 @@ class Priority{
         $(list).append(html);
 
         this.findList(list.data('id')).cards.push(card);
+
+        this.saveListsCards();
 
         console.log('finish adding card to list...');
     }
@@ -89,6 +92,16 @@ class Priority{
 
         board.lists.push(list);
 
+        this.saveData( this.api_path.new_list,
+            _.pick(list, 'list_hash', 'in_board', 'name', 'pos'),
+            function (response) {
+                console.log(response);
+            },
+            function (error) {
+                console.log(error);
+            }
+        );
+
         console.log('finish adding list to board...');
     }
 
@@ -101,6 +114,7 @@ class Priority{
         list.cards = _.filter(list.cards, function (card) {
             return card.card_hash != cardHash;
         });
+        this.saveListsCards();
     }
 
     findList(list_hash){
@@ -127,13 +141,17 @@ class Priority{
 
     updateListHeader(listHash, data){
         var list = this.findList(listHash);
-        list.header = data;
+        list.name = data;
+        console.log('before send:');
+        console.log(board.lists);
+        this.saveListsCards();
         return list;
     }
 
     updateCard(listHash, card_hash, data){
         var card = this.findCard(listHash, card_hash);
         card = _.extend(card, data);
+        this.saveListsCards();
         return card;
     }
 
@@ -146,6 +164,7 @@ class Priority{
         } else {
             var tag = _.pick(this.findTag(tag_hash), 'color', 'name', 'tag_hash');
             card.tags.push(tag);
+            this.saveListsCards();
             return card;
         }
     }
@@ -159,6 +178,7 @@ class Priority{
             card.tags = _.reject(card.tags, function (val) {
                 return val.tag_hash == tag.tag_hash;
             });
+            this.saveListsCards();
             return card;
         } else {
             // tag doesn't exist
@@ -176,6 +196,7 @@ class Priority{
         } else {
             var user = _.pick(this.findUser(user_id), 'id', 'name');
             card.users.push(user);
+            this.saveListsCards();
             return card;
         }
     }
@@ -189,6 +210,7 @@ class Priority{
             card.users = _.reject(card.users, function (val) {
                 return val.id == user.id;
             });
+            this.saveListsCards();
             return card;
         } else {
             // user doesn't exist
@@ -205,13 +227,16 @@ class Priority{
         $(oldCard).remove();
     }
 
-    updateListPos(list_hash, pos){
+    updateListPos(event){
+        var list_hash = $(event.item).data('id');
         var oldList = $('.list-wrapper[data-id="' + list_hash + '"]');
-        console.log(oldList);
-        var source   = document.getElementById("list-template").innerHTML;
-        var html = Handlebars.compile(source)(list);
-        $(oldList).after(html);
-        $(oldList).remove();
+        _.each(board.lists, function (list) {
+            list.pos = $('#playground').find('.list-wrapper[data-id="' + list.list_hash + '"]').index();
+        });
+
+        console.log(board.lists);
+
+        this.saveListsCards();
     }
 
     updateCardsPos(event){
@@ -241,8 +266,8 @@ class Priority{
         // change in_list data in cards
         $(event.item).data('inlist', toListHash);
 
-        this.sortCards(fromList.cards);
-        this.sortCards(toList.cards);
+        // this.sortCards(fromList.cards);
+        // this.sortCards(toList.cards);
 
         this.saveData( this.api_path.update_lists,
             _.pick(board, 'board_hash', 'lists'),
@@ -306,6 +331,18 @@ class Priority{
         }else{
             console.log('looper does not exist. ' + timerId);
         }
+    }
+
+    saveListsCards(){
+        this.saveData( this.api_path.update_lists,
+            _.pick(board, 'board_hash', 'lists'),
+            function (response) {
+                console.log(response);
+            },
+            function (error) {
+                console.log(error);
+            }
+        );
     }
 
     saveData(url, data, onSuccess, onFail){

@@ -47,6 +47,7 @@ Route::prefix('a')->group(function () {
 
     // Route::get('/list', '');
     Route::post('/list/update', 'ListsController@update');
+    Route::post('/list/create', 'ListsController@store');
     //
     // Route::prefix('cards/{card_hash}')->group(function () {
     //     Route::get('/', '');
