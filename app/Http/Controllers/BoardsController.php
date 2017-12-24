@@ -7,6 +7,8 @@ use App\BoardResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class BoardsController extends Controller
 {
@@ -51,7 +53,121 @@ class BoardsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data['success'] = false;
+
+        try {
+            $user = Auth::user();
+
+            $validator = Validator::make($request->all(), [
+                'name' => 'string',
+                'board_hash' => 'string'
+            ]);
+
+            if($validator->fails()){
+                $data['errors']['type'] = 'validation';
+                $data['errors']['message']= $validator->errors();
+                return Response()->json($data);
+            }
+
+            $data = $request->json()->all();
+            $board_hash = $data['board_hash'];
+
+            // create a new board
+            $boardId = DB::table('boards')->insertGetId([
+                'name' => $data['name'],
+                'board_hash' => $board_hash,
+                'user_id' => $user->id,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+
+            // set creater to default user in board
+            DB::table('board_resources')->insert([
+                'board_id' => $boardId,
+                'resource_type' => 'user',
+                'resource_id' => $user->id,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+            // set some more dummy users
+            DB::table('board_resources')->insert([
+                [
+                    'board_id' => $boardId,
+                    'resource_type' => 'user',
+                    'resource_id' => 3,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ],[
+                    'board_id' => $boardId,
+                    'resource_type' => 'user',
+                    'resource_id' => 4,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ],[
+                    'board_id' => $boardId,
+                    'resource_type' => 'user',
+                    'resource_id' => 5,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ],[
+                    'board_id' => $boardId,
+                    'resource_type' => 'user',
+                    'resource_id' => 6,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ],
+            ]);
+
+            $colors = ['red', 'orange', 'yellow', 'olive', 'green', 'teal', 'blue', 'purple', 'pink', 'brown', 'grey'];
+            $tagData = [];
+            foreach ($colors as $color) {
+                $tagData[] = [
+                    'tag_hash' => $this->uniqueId(),
+                    'color' => $color,
+                    'in_board' => $board_hash,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ];
+            }
+            // also create default tags
+            DB::table('tags')->insert($tagData);
+
+            // get the just inserted tag ids
+            $tagIds = DB::table('tags')->select('id')
+                ->where('in_board', $board_hash)
+                ->get()->pluck('id')->all();
+
+
+            $tagRelationData = [];
+            foreach ($tagIds as $tid) {
+                $tagRelationData[] = [
+                    'board_id' => $boardId,
+                    'resource_type' => 'tag',
+                    'resource_id' => $tid,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+                ];
+            }
+            // insert them to board_resources
+            DB::table('board_resources')->insert($tagRelationData);
+
+            $data['success'] = true;
+            $data['data']['board_hash'] = $board_hash;
+
+        } catch (Exception $e) {
+            
+        } finally {
+            return response()->json($data);
+        }
+    }
+
+    private function uniqueId() {
+        $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $str = '';
+        for ($i = 0; $i < 12; $i++) {
+            $str .= $chars[rand(0,61)];
+        }
+        return $str;
     }
 
     /**
