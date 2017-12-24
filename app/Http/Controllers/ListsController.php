@@ -43,7 +43,44 @@ class ListsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'pos' => 'integer',
+            'name' => 'string'
+        ]);
+
+        $data['success'] = false;
+
+        if($validator->fails()){
+            $data['errors']['type'] = 'validation';
+            $data['errors']['message']= $validator->errors();
+            return Response()->json($data);
+        }
+
+        $list = $request->json()->all();
+        $board_hash = $list['in_board'];
+
+        $listId = DB::table('lists')->insertGetId([
+            'list_hash' => $list['list_hash'],
+            'name' => $list['name'],
+            'in_board' => $board_hash,
+            'pos' => $list['pos'],
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        $boardId = DB::table('boards')->select('id')->where('board_hash', $board_hash)->first()->id;
+        DB::table('board_resources')->insert([
+            'board_id' => $boardId,
+            'resource_type' => 'list',
+            'resource_id' => $listId,
+            'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
+        ]);
+
+        $data['success'] = true;
+        return response()->json($data);
     }
 
     /**
@@ -113,7 +150,8 @@ class ListsController extends Controller
                 // list exists
                 DB::table('lists')->where('list_hash', $list['list_hash'])
                     ->update([
-                        'name' => $list['name']
+                        'name' => $list['name'],
+                        'pos' => $list['pos'],
                     ]);
                 // find list id by list hash
                 $listId = DB::table('lists')->select('id')->where('list_hash', $list['list_hash'])->first()->id;
