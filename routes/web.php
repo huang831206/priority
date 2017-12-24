@@ -42,6 +42,8 @@ Route::prefix('a')->group(function () {
 
     });
 
+    Route::post('/board/create', 'BoardsController@store');
+
     Route::get('/priority', 'UserController@getPriorityJSON');
     Route::post('/priority/update', 'UserController@updatePriorityJSON');
 
