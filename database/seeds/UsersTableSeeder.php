@@ -27,5 +27,33 @@ class UsersTableSeeder extends Seeder
             'password'=>Hash::make('123456'),
             'priority' => '[]',
         ]);
+
+        App\User::create([
+            'email' => 'tom@gmail.com',
+            'name'=>'Tom',
+            'password'=>Hash::make('123456'),
+            'priority' => '[]',
+        ]);
+
+        App\User::create([
+            'email' => 'marry@gmail.com',
+            'name'=>'Marry',
+            'password'=>Hash::make('123456'),
+            'priority' => '[]',
+        ]);
+
+        App\User::create([
+            'email' => 'jerry@gmail.com',
+            'name'=>'Jerry',
+            'password'=>Hash::make('123456'),
+            'priority' => '[]',
+        ]);
+
+        App\User::create([
+            'email' => 'tina@gmail.com',
+            'name'=>'Tina',
+            'password'=>Hash::make('123456'),
+            'priority' => '[]',
+        ]);
     }
 }
