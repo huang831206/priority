@@ -19,7 +19,7 @@ class ListsTableSeeder extends Seeder
                 'list_hash' => 'l01',
                 'name' => 'list no.1',
                 'in_board' => 'b01',
-                'pos' => 1,
+                'pos' => 0,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ],
@@ -27,7 +27,7 @@ class ListsTableSeeder extends Seeder
                 'list_hash' => 'l02',
                 'name' => 'list no.2',
                 'in_board' => 'b01',
-                'pos' => 2,
+                'pos' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ]
