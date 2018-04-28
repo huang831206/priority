@@ -51,7 +51,7 @@
         </form>
 
         <div class="ui message">
-            New to us? <a href="#">Sign Up</a>
+            New to us? <a href="{{ route('register') }}">Sign Up</a>
         </div>
 
 

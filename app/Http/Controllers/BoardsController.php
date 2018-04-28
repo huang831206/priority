@@ -66,7 +66,7 @@ class BoardsController extends Controller
             if($validator->fails()){
                 $data['errors']['type'] = 'validation';
                 $data['errors']['message']= $validator->errors();
-                return Response()->json($data);
+                return response()->json($data);
             }
 
             $data = $request->json()->all();
@@ -155,7 +155,7 @@ class BoardsController extends Controller
             $data['data']['board_hash'] = $board_hash;
 
         } catch (Exception $e) {
-            
+
         } finally {
             return response()->json($data);
         }
