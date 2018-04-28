@@ -25,6 +25,9 @@ We hope this will bring some change to the world.
 And btw, it's fun to play with these codes.
 
 
+### Nomatter what board or list the cards are in, as long as you're tagged, it will appear in your personal list!!!
+![img1](https://i.imgur.com/NMNZJP7.png)
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
